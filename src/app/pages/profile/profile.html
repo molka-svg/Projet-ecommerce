@@ -1,0 +1,175 @@
+<div class="profile-page container">
+  <header class="page-header">
+    <span class="eyebrow">Mon Espace</span>
+    <h1>Profil Client</h1>
+    <p>Gérez vos coordonnées de livraison et vos informations personnelles.</p>
+  </header>
+
+  <app-loading-spinner *ngIf="loading" message="Chargement de votre compte..." />
+
+  <div class="profile-layout" *ngIf="!loading && user">
+    <!-- LEFT SIDEBAR: ACCOUNT OVERVIEW & QUICK ACTIONS -->
+    <aside class="profile-sidebar">
+      <div class="card account-summary-card">
+        <div class="avatar-badge">
+          {{ (user.firstName?.[0] || user.username[0] || 'U') | uppercase }}
+        </div>
+        <h2 class="user-display-name">
+          {{ user.firstName }} {{ user.lastName }}
+        </h2>
+        <span class="user-username">&#64;{{ user.username }}</span>
+        <span class="user-email">{{ user.email }}</span>
+
+        <span class="role-pill" *ngIf="authService.isAdmin">
+          ★ Administrateur
+        </span>
+
+        <hr class="sidebar-divider" />
+
+        <nav class="sidebar-nav">
+          <a routerLink="/orders" class="side-link">
+            <span>📦 Mes Commandes</span>
+          </a>
+          <a *ngIf="authService.isAdmin" routerLink="/admin" class="side-link admin-link">
+            <span>⚙ Panneau d'Administration</span>
+          </a>
+          <button type="button" class="side-link logout-btn" (click)="logout()">
+            <span>🚪 Déconnexion</span>
+          </button>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- MAIN FORM -->
+    <main class="profile-main">
+      <form (ngSubmit)="onSubmit()" class="card profile-form-card">
+        <h2>Coordonnées Personnelles</h2>
+
+        <div *ngIf="successMessage" class="alert alert-success">
+          ✓ {{ successMessage }}
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-error">
+          ⚠ {{ errorMessage }}
+        </div>
+
+        <div class="grid grid-cols-2">
+          <div class="form-group">
+            <label for="username" class="form-label">Identifiant (non modifiable)</label>
+            <input
+              type="text"
+              id="username"
+              [value]="user.username"
+              disabled
+              class="form-input disabled-input"
+            />
+          </div>
+          <div class="form-group">
+            <label for="email" class="form-label">Adresse e-mail</label>
+            <input
+              type="email"
+              id="email"
+              [value]="user.email"
+              disabled
+              class="form-input disabled-input"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2">
+          <div class="form-group">
+            <label for="firstName" class="form-label">Prénom</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              [(ngModel)]="firstName"
+              class="form-input"
+              placeholder="Prénom"
+            />
+          </div>
+          <div class="form-group">
+            <label for="lastName" class="form-label">Nom</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              [(ngModel)]="lastName"
+              class="form-input"
+              placeholder="Nom de famille"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone" class="form-label">Numéro de téléphone</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            [(ngModel)]="phone"
+            class="form-input"
+            placeholder="06 12 34 56 78"
+          />
+        </div>
+
+        <h2 class="mt-lg">Adresse de Livraison par Défaut</h2>
+
+        <div class="form-group">
+          <label for="address" class="form-label">Rue et numéro</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            [(ngModel)]="address"
+            class="form-input"
+            placeholder="12 rue de la Paix"
+          />
+        </div>
+
+        <div class="grid grid-cols-2">
+          <div class="form-group">
+            <label for="postalCode" class="form-label">Code postal</label>
+            <input
+              type="text"
+              id="postalCode"
+              name="postalCode"
+              [(ngModel)]="postalCode"
+              class="form-input"
+              placeholder="75001"
+            />
+          </div>
+          <div class="form-group">
+            <label for="city" class="form-label">Ville</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              [(ngModel)]="city"
+              class="form-input"
+              placeholder="Paris"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="country" class="form-label">Pays</label>
+          <input
+            type="text"
+            id="country"
+            name="country"
+            [(ngModel)]="country"
+            class="form-input"
+          />
+        </div>
+
+        <div class="submit-row mt-lg">
+          <button type="submit" class="btn btn-primary" [disabled]="saving">
+            <span *ngIf="!saving">Enregistrer les modifications</span>
+            <span *ngIf="saving">Sauvegarde en cours...</span>
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>

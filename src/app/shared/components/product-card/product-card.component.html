@@ -1,0 +1,54 @@
+<article class="product-card" [class.out-of-stock]="isOutOfStock">
+  <a [routerLink]="['/products', product.slug || product.id]" class="product-media-link">
+    <div class="product-image-container">
+      <img
+        *ngIf="imageUrl; else placeholder"
+        [src]="imageUrl"
+        [alt]="product.name"
+        class="product-image"
+        loading="lazy"
+      />
+      <ng-template #placeholder>
+        <div class="product-placeholder">
+          <span class="placeholder-brand">eshop.</span>
+          <span class="placeholder-icon">✦</span>
+        </div>
+      </ng-template>
+
+      <span *ngIf="product.featured" class="badge-tag featured-tag">Coup de cœur</span>
+      <span *ngIf="isOutOfStock" class="badge-tag stock-tag">Épuisé</span>
+    </div>
+  </a>
+
+  <div class="product-details">
+    <div class="product-category" *ngIf="product.categorie?.name">
+      {{ product.categorie?.name }}
+    </div>
+
+    <h3 class="product-name">
+      <a [routerLink]="['/products', product.slug || product.id]">{{ product.name }}</a>
+    </h3>
+
+    <p class="product-description" *ngIf="product.description">
+      {{ product.description }}
+    </p>
+
+    <div class="product-footer">
+      <div class="product-price">
+        {{ product.price | currency:'EUR':'symbol':'1.2-2' }}
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-sm"
+        [ngClass]="isOutOfStock ? 'btn-outline' : 'btn-primary'"
+        [disabled]="isOutOfStock"
+        (click)="addToCart($event)"
+        [attr.aria-label]="'Ajouter ' + product.name + ' au panier'"
+      >
+        <span *ngIf="!isOutOfStock">Ajouter</span>
+        <span *ngIf="isOutOfStock">Indisponible</span>
+      </button>
+    </div>
+  </div>
+</article>

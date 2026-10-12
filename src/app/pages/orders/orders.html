@@ -1,0 +1,108 @@
+<div class="orders-page container">
+  <header class="page-header">
+    <span class="eyebrow">Espace Client</span>
+    <h1>Vos Commandes</h1>
+    <p>Consultez l'historique et le suivi de vos commandes eshop.</p>
+  </header>
+
+  <app-loading-spinner *ngIf="loading" message="Récupération de vos commandes..." />
+
+  <div *ngIf="errorMessage && !loading" class="alert alert-error">
+    <span>⚠ {{ errorMessage }}</span>
+    <button type="button" class="btn btn-sm btn-outline ml-auto" (click)="fetchOrders()">
+      Réessayer
+    </button>
+  </div>
+
+  <app-empty-state
+    *ngIf="!loading && !errorMessage && orders.length === 0"
+    icon="📦"
+    title="Aucune commande enregistrée"
+    description="Vous n'avez pas encore passé de commande sur notre boutique."
+    actionText="Découvrir notre collection"
+    actionUrl="/products"
+  />
+
+  <div class="orders-list" *ngIf="!loading && orders.length > 0">
+    <article *ngFor="let order of orders" class="card order-card">
+      <div class="order-header-row">
+        <div class="order-id-group">
+          <span class="order-num">{{ order.orderNumber }}</span>
+          <span class="order-date">{{ order.createdAt | date:'dd MMMM yyyy à HH:mm':'fr' }}</span>
+        </div>
+
+        <div class="order-status-group">
+          <span
+            class="badge"
+            [ngClass]="order.paymentStatus === 'paid' ? 'badge-success' : 'badge-warning'"
+          >
+            Paiement : {{ order.paymentStatus === 'paid' ? 'Validé' : 'En attente' }}
+          </span>
+
+          <span
+            class="badge"
+            [ngClass]="{
+              'badge-primary': order.orderStatus === 'processing',
+              'badge-info': order.orderStatus === 'shipped',
+              'badge-success': order.orderStatus === 'delivered',
+              'badge-danger': order.orderStatus === 'cancelled'
+            }"
+          >
+            Statut : {{ order.orderStatus }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Preview items -->
+      <div class="order-preview-items">
+        <div class="preview-item" *ngFor="let item of order.items">
+          <span class="qty-bubble">{{ item.quantity }}x</span>
+          <span class="item-title">{{ item.name }}</span>
+          <span class="item-cost">{{ item.subtotal | currency:'EUR':'symbol':'1.2-2' }}</span>
+        </div>
+      </div>
+
+      <div class="order-footer-row">
+        <div class="order-total-info">
+          <span>Total :</span>
+          <strong>{{ order.total | currency:'EUR':'symbol':'1.2-2' }}</strong>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-outline btn-sm"
+          (click)="viewDetails(order)"
+        >
+          {{ selectedOrder?.id === order.id ? 'Masquer les détails' : 'Détails de livraison & articles' }}
+        </button>
+      </div>
+
+      <!-- EXPANDED DETAILS -->
+      <div class="order-expanded-details" *ngIf="selectedOrder?.id === order.id">
+        <hr class="detail-divider" />
+
+        <div class="expanded-grid">
+          <div class="address-col" *ngIf="order.shippingAddress">
+            <h4>Adresse de livraison</h4>
+            <p>
+              <strong>{{ order.shippingAddress.firstName }} {{ order.shippingAddress.lastName }}</strong><br />
+              {{ order.shippingAddress.address }}<br />
+              {{ order.shippingAddress.postalCode }} {{ order.shippingAddress.city }}<br />
+              {{ order.shippingAddress.country }}<br />
+              <span *ngIf="order.shippingAddress.phone">Tél : {{ order.shippingAddress.phone }}</span>
+            </p>
+          </div>
+
+          <div class="payment-col">
+            <h4>Paiement</h4>
+            <p>
+              Référence session : <code>{{ order.stripeSessionId || 'N/A' }}</code><br />
+              Sous-total : {{ order.subtotal | currency:'EUR':'symbol':'1.2-2' }}<br />
+              Total commande : {{ order.total | currency:'EUR':'symbol':'1.2-2' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>

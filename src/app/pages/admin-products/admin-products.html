@@ -1,0 +1,32 @@
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <a class="brand" routerLink="/">eshop<span>.</span></a>
+    <p class="sidebar-label">ADMINISTRATION</p>
+    <a class="nav-item" routerLink="/admin">Vue d'ensemble</a>
+    <a class="nav-item active" routerLink="/admin/products">Produits</a>
+    <a class="nav-item" routerLink="/admin/categories">Catégories</a>
+    <a class="nav-item" routerLink="/admin/orders">Commandes</a>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-topbar">
+      <div><p class="eyebrow">CATALOGUE</p><h1>Produits</h1><p class="muted">Gérez les articles proposés dans la boutique.</p></div>
+      <a class="primary-link" routerLink="/admin/products/new">＋ Ajouter un produit</a>
+    </header>
+
+    <section class="admin-panel">
+      <div class="toolbar">
+        <input type="search" placeholder="Rechercher un produit..." aria-label="Rechercher un produit" />
+        <select aria-label="Filtrer par statut"><option>Tous les statuts</option><option>Publié</option><option>Brouillon</option></select>
+      </div>
+
+      <div class="empty-table">
+        <span>▦</span>
+        <h2>Votre catalogue</h2>
+        <p class="muted">Les produits seront listés ici après connexion à l'API Strapi.</p>
+        <a class="secondary-link" href="http://localhost:1337/admin" target="_blank" rel="noopener">Ouvrir l'administration Strapi ↗</a>
+      </div>
+    </section>
+  </main>
+</div>

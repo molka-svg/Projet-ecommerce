@@ -1,0 +1,34 @@
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <a class="brand" routerLink="/">eshop<span>.</span></a>
+    <p class="sidebar-label">ADMINISTRATION</p>
+    <a class="nav-item" routerLink="/admin">Vue d'ensemble</a>
+    <a class="nav-item" routerLink="/admin/products">Produits</a>
+    <a class="nav-item active" routerLink="/admin/categories">Catégories</a>
+    <a class="nav-item" routerLink="/admin/orders">Commandes</a>
+  </aside>
+
+  <main class="admin-main">
+    <p class="eyebrow">ORGANISATION DU CATALOGUE</p>
+    <h1>Catégories</h1>
+    <p class="muted">Organisez les produits pour aider les clients à les découvrir.</p>
+
+    <section class="admin-panel">
+      <h2>Nouvelle catégorie</h2>
+      <form class="category-form">
+        <label>Nom de la catégorie<input name="name" placeholder="Ex. Accessoires" required /></label>
+        <label>Description<textarea name="description" rows="3" placeholder="Description facultative"></textarea></label>
+        <button class="primary-button" type="submit">Ajouter la catégorie</button>
+      </form>
+    </section>
+
+    <section class="admin-panel">
+      <h2>Catégories existantes</h2>
+      <div class="empty-table">
+        <span>▦</span>
+        <p class="muted">Les catégories seront affichées ici après connexion à l'API Strapi.</p>
+      </div>
+    </section>
+  </main>
+</div>

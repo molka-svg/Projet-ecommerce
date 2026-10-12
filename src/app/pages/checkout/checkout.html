@@ -1,0 +1,198 @@
+<div class="checkout-page container">
+  <header class="checkout-header">
+    <a routerLink="/cart" class="back-link">← Retour au panier</a>
+    <h1>Finaliser votre Commande</h1>
+    <p>Paiement sécurisé et vérifié sur le serveur de commande.</p>
+  </header>
+
+  <div class="checkout-layout">
+    <!-- CHECKOUT FORM -->
+    <div class="form-wrapper">
+      <form (ngSubmit)="onSubmit()" class="card checkout-card">
+        <h2 class="card-title">1. Vos Coordonnées</h2>
+
+        <div class="form-group">
+          <label for="email" class="form-label">Adresse E-mail *</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="email"
+            required
+            class="form-input"
+            placeholder="votre.email@exemple.fr"
+          />
+          <span class="field-hint">La confirmation et le suivi vous seront envoyés à cette adresse.</span>
+        </div>
+
+        <div class="grid grid-cols-2">
+          <div class="form-group">
+            <label for="firstName" class="form-label">Prénom *</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              [(ngModel)]="firstName"
+              required
+              class="form-input"
+            />
+          </div>
+          <div class="form-group">
+            <label for="lastName" class="form-label">Nom *</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              [(ngModel)]="lastName"
+              required
+              class="form-input"
+            />
+          </div>
+        </div>
+
+        <h2 class="card-title mt-lg">2. Adresse de Livraison</h2>
+
+        <div class="form-group">
+          <label for="address" class="form-label">Adresse (numéro et rue) *</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            [(ngModel)]="address"
+            required
+            class="form-input"
+            placeholder="12 rue de la Paix"
+          />
+        </div>
+
+        <div class="grid grid-cols-2">
+          <div class="form-group">
+            <label for="postalCode" class="form-label">Code Postal *</label>
+            <input
+              type="text"
+              id="postalCode"
+              name="postalCode"
+              [(ngModel)]="postalCode"
+              required
+              class="form-input"
+              placeholder="75001"
+            />
+          </div>
+          <div class="form-group">
+            <label for="city" class="form-label">Ville *</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              [(ngModel)]="city"
+              required
+              class="form-input"
+              placeholder="Paris"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2">
+          <div class="form-group">
+            <label for="country" class="form-label">Pays *</label>
+            <input
+              type="text"
+              id="country"
+              name="country"
+              [(ngModel)]="country"
+              required
+              class="form-input"
+            />
+          </div>
+          <div class="form-group">
+            <label for="phone" class="form-label">Téléphone (suivi transporteur)</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              [(ngModel)]="phone"
+              class="form-input"
+              placeholder="06 12 34 56 78"
+            />
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="alert alert-error mt-md">
+          <span>⚠ {{ errorMessage }}</span>
+        </div>
+
+        <div class="payment-method-box mt-lg">
+          <h2 class="card-title">3. Méthode de Règlement</h2>
+          <div class="stripe-badge-box">
+            <div class="stripe-badge-header">
+              <span class="lock-icon">🔒</span>
+              <strong>Paiement Stripe Sécurisé (Test Mode)</strong>
+            </div>
+            <p class="stripe-badge-desc">
+              Vous allez être redirigé vers la page de paiement sécurisée de Stripe. Aucune donnée bancaire ne transite par nos serveurs.
+            </p>
+          </div>
+        </div>
+
+        <div class="submit-row mt-lg">
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg w-full"
+            [disabled]="loading"
+          >
+            <span *ngIf="!loading">Procéder au paiement ({{ total | currency:'EUR':'symbol':'1.2-2' }})</span>
+            <span *ngIf="loading">Initialisation sécurisée de Stripe...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ORDER SUMMARY SIDEBAR -->
+    <aside class="summary-wrapper">
+      <div class="card summary-card">
+        <h3>Votre Commande ({{ cartService.totalCount }})</h3>
+
+        <div class="summary-items-list">
+          <div class="summary-item-row" *ngFor="let item of cartService.items">
+            <div class="summary-item-thumb">
+              <img *ngIf="item.imageUrl" [src]="item.imageUrl" [alt]="item.name" />
+              <span *ngIf="!item.imageUrl">✦</span>
+            </div>
+            <div class="summary-item-info">
+              <h4>{{ item.name }}</h4>
+              <span>Qté: {{ item.quantity }}</span>
+            </div>
+            <div class="summary-item-price">
+              {{ (item.price * item.quantity) | currency:'EUR':'symbol':'1.2-2' }}
+            </div>
+          </div>
+        </div>
+
+        <hr class="summary-divider" />
+
+        <div class="summary-line">
+          <span>Sous-total</span>
+          <span>{{ cartService.subtotal | currency:'EUR':'symbol':'1.2-2' }}</span>
+        </div>
+
+        <div class="summary-line">
+          <span>Livraison</span>
+          <span *ngIf="shippingCost === 0" class="free-text">Offerte</span>
+          <span *ngIf="shippingCost > 0">{{ shippingCost | currency:'EUR':'symbol':'1.2-2' }}</span>
+        </div>
+
+        <hr class="summary-divider" />
+
+        <div class="summary-line total-line">
+          <strong>Total à payer</strong>
+          <strong>{{ total | currency:'EUR':'symbol':'1.2-2' }}</strong>
+        </div>
+
+        <div class="checkout-trust">
+          <p>✓ Validation des stocks et des tarifs en temps réel</p>
+          <p>✓ Facture officielle envoyée après paiement</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>

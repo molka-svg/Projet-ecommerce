@@ -1,0 +1,151 @@
+<div class="catalogue-page container">
+  <!-- PAGE HEADER -->
+  <header class="catalogue-header">
+    <span class="catalogue-eyebrow">La Galerie Complète</span>
+    <h1 class="catalogue-title">Mobilier & Objets Rares</h1>
+    <p class="catalogue-lead">
+      Explorez l’ensemble de nos créations artisanales. Chaque pièce est éditée en séries limitées avec des matériaux bruts durables.
+    </p>
+  </header>
+
+  <!-- CATEGORY PILLS FILTER -->
+  <nav class="category-pills" aria-label="Filtrer par collection">
+    <button
+      type="button"
+      class="pill-btn"
+      [class.active]="!selectedCategory"
+      (click)="selectCategory('')"
+    >
+      Toutes les pièces
+    </button>
+    <button
+      *ngFor="let cat of categories"
+      type="button"
+      class="pill-btn"
+      [class.active]="selectedCategory === (cat.slug || cat.id)"
+      (click)="selectCategory(cat.slug || cat.id)"
+    >
+      {{ cat.name }}
+    </button>
+  </nav>
+
+  <!-- FILTER & SORT BAR -->
+  <div class="controls-bar">
+    <div class="controls-search">
+      <input
+        type="search"
+        placeholder="Rechercher par mot-clé..."
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="applyFilters()"
+        class="form-input search-input"
+        aria-label="Recherche textuelle"
+      />
+      <button type="button" class="btn btn-outline btn-sm" (click)="applyFilters()">
+        Filtrer
+      </button>
+    </div>
+
+    <div class="controls-filters">
+      <!-- Price Inputs -->
+      <div class="price-inputs">
+        <input
+          type="number"
+          placeholder="Min €"
+          [(ngModel)]="minPrice"
+          (change)="applyFilters()"
+          class="form-input price-input"
+          aria-label="Prix minimum"
+        />
+        <span class="price-separator">-</span>
+        <input
+          type="number"
+          placeholder="Max €"
+          [(ngModel)]="maxPrice"
+          (change)="applyFilters()"
+          class="form-input price-input"
+          aria-label="Prix maximum"
+        />
+      </div>
+
+      <!-- Sort Select -->
+      <select
+        [(ngModel)]="sortBy"
+        (change)="applyFilters()"
+        class="form-select sort-select"
+        aria-label="Trier par"
+      >
+        <option value="newest">Nouveautés</option>
+        <option value="price_asc">Prix croissant</option>
+        <option value="price_desc">Prix décroissant</option>
+        <option value="name_asc">Nom alphabétique</option>
+      </select>
+
+      <button
+        *ngIf="searchTerm || selectedCategory || minPrice !== null || maxPrice !== null || onlyFeatured"
+        type="button"
+        class="btn btn-outline btn-sm reset-btn"
+        (click)="resetFilters()"
+      >
+        ✕ Réinitialiser
+      </button>
+    </div>
+  </div>
+
+  <!-- ACTIVE COUNT -->
+  <div class="results-meta" *ngIf="!loading">
+    <span class="count-text">
+      <strong>{{ totalProducts }}</strong> pièce{{ totalProducts > 1 ? 's' : '' }} trouvée{{ totalProducts > 1 ? 's' : '' }}
+    </span>
+  </div>
+
+  <!-- LOADING SPINNER -->
+  <app-loading-spinner *ngIf="loading" message="Sélection des pièces en cours..." />
+
+  <!-- ERROR ALERT -->
+  <div *ngIf="errorMessage && !loading" class="alert alert-error">
+    <span>⚠ {{ errorMessage }}</span>
+    <button type="button" class="btn btn-sm btn-outline ml-auto" (click)="fetchProducts()">
+      Réessayer
+    </button>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <app-empty-state
+    *ngIf="!loading && !errorMessage && products.length === 0"
+    icon="🔍"
+    title="Aucune création trouvée"
+    description="Aucun produit ne correspond à vos critères actuels. Essayez d'ajuster ou de réinitialiser vos filtres."
+    actionText="Réinitialiser tous les filtres"
+    (click)="resetFilters()"
+  />
+
+  <!-- PRODUCTS GRID -->
+  <section class="grid grid-cols-4" *ngIf="!loading && !errorMessage && products.length > 0">
+    <app-product-card *ngFor="let prod of products" [product]="prod" />
+  </section>
+
+  <!-- PAGINATION -->
+  <nav class="pagination-wrapper" *ngIf="!loading && totalPages > 1" aria-label="Pagination">
+    <button
+      type="button"
+      class="btn btn-outline btn-sm"
+      [disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)"
+    >
+      ← Précédent
+    </button>
+
+    <span class="page-indicator">
+      Page {{ currentPage }} sur {{ totalPages }}
+    </span>
+
+    <button
+      type="button"
+      class="btn btn-outline btn-sm"
+      [disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)"
+    >
+      Suivant →
+    </button>
+  </nav>
+</div>

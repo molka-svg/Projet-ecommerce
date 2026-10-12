@@ -1,0 +1,58 @@
+<div class="search-page container">
+  <header class="search-header">
+    <span class="eyebrow">Recherche dans la collection</span>
+    <h1>Trouver une pièce</h1>
+
+    <form class="search-form" (ngSubmit)="onSearchSubmit()">
+      <div class="search-bar">
+        <input
+          type="search"
+          name="query"
+          [(ngModel)]="searchQuery"
+          placeholder="Ex: fauteuil velours, lampe albâtre, vase..."
+          class="form-input search-input"
+          aria-label="Requête de recherche"
+        />
+        <button type="submit" class="btn btn-primary">
+          Rechercher
+        </button>
+      </div>
+    </form>
+  </header>
+
+  <!-- LOADING SPINNER -->
+  <app-loading-spinner *ngIf="loading" message="Exploration des ateliers en cours..." />
+
+  <!-- RESULTS COUNT -->
+  <div class="search-meta" *ngIf="hasSearched && !loading">
+    <p>
+      Résultats pour « <strong>{{ searchQuery }}</strong> » :
+      <span>{{ products.length }} création{{ products.length > 1 ? 's' : '' }} trouvée{{ products.length > 1 ? 's' : '' }}</span>
+    </p>
+  </div>
+
+  <!-- EMPTY RESULTS -->
+  <app-empty-state
+    *ngIf="hasSearched && !loading && products.length === 0"
+    icon="🔍"
+    title="Aucun résultat pour cette recherche"
+    description="Nous n'avons trouvé aucune création correspondant à votre terme de recherche. Essayez avec un mot-clé plus générique."
+    actionText="Parcourir tout le catalogue"
+    actionUrl="/products"
+  />
+
+  <!-- INITIAL PROMPT -->
+  <app-empty-state
+    *ngIf="!hasSearched && !loading"
+    icon="✧"
+    title="Que recherchez-vous aujourd'hui ?"
+    description="Saisissez un nom de pièce, une matière ou un style pour parcourir nos créations d'exception."
+    actionText="Explorer le catalogue"
+    actionUrl="/products"
+  />
+
+  <!-- RESULTS GRID -->
+  <div class="grid grid-cols-4" *ngIf="!loading && products.length > 0">
+    <app-product-card *ngFor="let prod of products" [product]="prod" />
+  </div>
+</div>

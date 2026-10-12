@@ -1,0 +1,29 @@
+
+:host { display:block; }
+.admin-layout { display:grid; grid-template-columns:245px minmax(0,1fr); min-height:100vh; background:#faf9f6; }
+.admin-sidebar { display:flex; flex-direction:column; align-items:stretch; gap:8px; padding:28px 20px; background:#30372a; }
+.brand { margin-bottom:35px; color:white; font-size:29px; font-weight:700; letter-spacing:-1.5px; text-decoration:none; }
+.brand span { color:#b9c39b; }
+.sidebar-label { margin:0 0 12px; color:#b6bba9; font-size:10px; font-weight:700; letter-spacing:1.7px; }
+.nav-item { padding:12px; color:#e7e8df; border-radius:5px; font-size:13px; text-decoration:none; }
+.nav-item:hover,.nav-item.active { color:white; background:#48533a; }
+.admin-main { min-width:0; padding:35px clamp(20px,4vw,55px); }
+.admin-topbar { display:flex; justify-content:space-between; align-items:center; gap:18px; }
+.eyebrow { color:#788064; font-size:11px; font-weight:700; letter-spacing:2px; }
+h1,h2 { color:#30372a; font-family:'Playfair Display',Georgia,serif; }
+h1 { margin:8px 0; font-size:35px; }
+h2 { font-size:22px; }
+.muted,.stat-card small,.quick-actions small { color:#77786e; font-size:12px; line-height:1.7; }
+.admin-badge { padding:9px 12px; color:#48533a; background:#eeeee4; border-radius:5px; font-size:11px; font-weight:600; }
+.stat-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:17px; margin:28px 0; }
+.stat-card,.admin-panel { padding:22px; background:#fff; border:1px solid #eeede6; border-radius:7px; }
+.stat-card { display:flex; flex-direction:column; gap:12px; }
+.stat-card span { color:#656858; font-size:12px; }
+.stat-card strong { color:#30372a; font-size:30px; }
+.admin-panel { margin-top:25px; }
+.quick-actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.quick-actions a { display:flex; flex-direction:column; gap:10px; padding:18px; color:#30372a; border:1px solid #eeede6; border-radius:5px; text-decoration:none; }
+.quick-actions a:hover { border-color:#a4ab91; background:#faf9f6; }
+.quick-actions a span { color:#788064; font-size:25px; }
+.quick-actions strong { font-size:13px; }
+@media(max-width:850px) { .admin-layout { grid-template-columns:1fr; } .admin-sidebar { gap:5px; } .brand { margin-bottom:15px; } .stat-grid,.quick-actions { grid-template-columns:1fr; } }

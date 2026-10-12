@@ -1,0 +1,152 @@
+<div class="cart-page container">
+  <header class="cart-header">
+    <h1>Votre Panier</h1>
+    <p *ngIf="cartService.items.length > 0">
+      {{ cartService.totalCount }} article{{ cartService.totalCount > 1 ? 's' : '' }} sélectionné{{ cartService.totalCount > 1 ? 's' : '' }}
+    </p>
+  </header>
+
+  <!-- EMPTY CART STATE -->
+  <app-empty-state
+    *ngIf="cartService.items.length === 0"
+    icon="🛒"
+    title="Votre panier est actuellement vide"
+    description="Vous n'avez pas encore ajouté de pièces à votre panier. Laissez-vous inspirer par nos sélections artisanales."
+    actionText="Découvrir nos créations"
+    actionUrl="/products"
+  />
+
+  <!-- FILLED CART LAYOUT -->
+  <div class="cart-layout" *ngIf="cartService.items.length > 0">
+    <!-- ITEMS LIST -->
+    <div class="cart-items-wrapper">
+      <!-- Shipping Progress Bar -->
+      <div class="shipping-card">
+        <div class="shipping-msg">
+          <span *ngIf="freeShippingRemaining > 0">
+            Plus que <strong>{{ freeShippingRemaining | currency:'EUR':'symbol':'1.2-2' }}</strong> pour bénéficier de la <strong>livraison offerte</strong> !
+          </span>
+          <span *ngIf="freeShippingRemaining === 0" class="shipping-free-pill">
+            ✓ Félicitations ! La livraison en France est offerte sur cette commande.
+          </span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" [style.width.%]="shippingProgress"></div>
+        </div>
+      </div>
+
+      <!-- Table Header -->
+      <div class="items-table-header">
+        <span>Pièce</span>
+        <span>Quantité</span>
+        <span class="text-right">Total</span>
+      </div>
+
+      <!-- Item Row -->
+      <div class="cart-item-row" *ngFor="let item of cartService.items">
+        <div class="item-product-info">
+          <div class="item-thumbnail">
+            <img
+              *ngIf="item.imageUrl; else itemPlaceholder"
+              [src]="item.imageUrl"
+              [alt]="item.name"
+            />
+            <ng-template #itemPlaceholder>
+              <span class="item-mini-brand">eshop.</span>
+            </ng-template>
+          </div>
+
+          <div class="item-details">
+            <span class="item-cat" *ngIf="item.categoryName">{{ item.categoryName }}</span>
+            <h3 class="item-name">
+              <a [routerLink]="['/products', item.documentId || item.id]">{{ item.name }}</a>
+            </h3>
+            <span class="item-unit-price">
+              Prix unitaire : {{ item.price | currency:'EUR':'symbol':'1.2-2' }}
+            </span>
+            <button
+              type="button"
+              class="item-remove-btn"
+              (click)="cartService.removeItem(item.id)"
+              aria-label="Supprimer cet article"
+            >
+              Supprimer
+            </button>
+          </div>
+        </div>
+
+        <!-- Quantity Control -->
+        <div class="item-quantity-cell">
+          <div class="qty-stepper">
+            <button
+              type="button"
+              class="stepper-btn"
+              (click)="cartService.updateQuantity(item.id, -1)"
+              aria-label="Diminuer"
+            >
+              −
+            </button>
+            <span class="stepper-val">{{ item.quantity }}</span>
+            <button
+              type="button"
+              class="stepper-btn"
+              (click)="cartService.updateQuantity(item.id, 1)"
+              [disabled]="item.stock ? item.quantity >= item.stock : false"
+              aria-label="Augmenter"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <!-- Line Total -->
+        <div class="item-line-total text-right">
+          {{ (item.price * item.quantity) | currency:'EUR':'symbol':'1.2-2' }}
+        </div>
+      </div>
+
+      <div class="cart-actions-bottom">
+        <a routerLink="/products" class="btn btn-outline btn-sm">
+          ← Continuer mes achats
+        </a>
+        <button type="button" class="btn btn-outline btn-sm btn-clear" (click)="cartService.clearCart()">
+          Vider le panier
+        </button>
+      </div>
+    </div>
+
+    <!-- ORDER SUMMARY SIDEBAR -->
+    <aside class="cart-summary-card">
+      <h2 class="summary-title">Récapitulatif de commande</h2>
+
+      <div class="summary-line">
+        <span>Sous-total</span>
+        <span>{{ cartService.subtotal | currency:'EUR':'symbol':'1.2-2' }}</span>
+      </div>
+
+      <div class="summary-line">
+        <span>Livraison estimée</span>
+        <span *ngIf="shippingCost === 0" class="free-text">Offerte</span>
+        <span *ngIf="shippingCost > 0">{{ shippingCost | currency:'EUR':'symbol':'1.2-2' }}</span>
+      </div>
+
+      <hr class="summary-divider" />
+
+      <div class="summary-line total-line">
+        <strong>Total</strong>
+        <strong>{{ total | currency:'EUR':'symbol':'1.2-2' }}</strong>
+      </div>
+
+      <p class="summary-tax-note">TVA incluse. Calcul certifié sur le serveur de paiement.</p>
+
+      <a routerLink="/checkout" class="btn btn-primary btn-lg w-full checkout-cta">
+        Valider et payer la commande
+      </a>
+
+      <div class="security-badges">
+        <span>🔒 Paiement crypté SSL via Stripe</span>
+        <span>📦 Retours offerts sous 30 jours</span>
+      </div>
+    </aside>
+  </div>
+</div>

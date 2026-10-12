@@ -1,0 +1,36 @@
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <a class="brand" routerLink="/">eshop<span>.</span></a>
+    <p class="sidebar-label">ADMINISTRATION</p>
+    <a class="nav-item" routerLink="/admin">Vue d'ensemble</a>
+    <a class="nav-item" routerLink="/admin/products">Produits</a>
+    <a class="nav-item" routerLink="/admin/categories">Catégories</a>
+    <a class="nav-item active" routerLink="/admin/orders">Commandes</a>
+  </aside>
+
+  <main class="admin-main">
+    <p class="eyebrow">VENTES ET EXPÉDITIONS</p>
+    <h1>Commandes</h1>
+    <p class="muted">Consultez les achats et suivez leur progression.</p>
+
+    <section class="admin-panel">
+      <div class="toolbar">
+        <input type="search" placeholder="Rechercher une commande..." aria-label="Rechercher une commande" />
+        <select aria-label="Filtrer par statut">
+          <option>Tous les statuts</option>
+          <option>En attente</option>
+          <option>Payée</option>
+          <option>Expédiée</option>
+          <option>Annulée</option>
+        </select>
+      </div>
+
+      <div class="empty-table">
+        <span>↗</span>
+        <h2>Aucune commande à afficher</h2>
+        <p class="muted">Les commandes apparaîtront ici lorsque le système de commande sera connecté.</p>
+      </div>
+    </section>
+  </main>
+</div>
