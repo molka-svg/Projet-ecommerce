@@ -1,0 +1,69 @@
+<div class="payment-result-page container">
+  <!-- LOADING SPINNER -->
+  <app-loading-spinner
+    *ngIf="loading"
+    message="Vérification de la confirmation bancaire en cours..."
+  />
+
+  <!-- ERROR -->
+  <div *ngIf="!loading && errorMessage" class="card result-card error-card">
+    <div class="result-icon error-icon">✕</div>
+    <h2>Vérification impossible</h2>
+    <p>{{ errorMessage }}</p>
+    <div class="result-actions">
+      <a routerLink="/orders" class="btn btn-outline">Consulter mes commandes</a>
+      <a routerLink="/" class="btn btn-primary">Retour à la boutique</a>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div *ngIf="!loading && verified" class="card result-card success-card">
+    <div class="result-icon success-icon">✓</div>
+    <span class="result-eyebrow">Paiement validé avec succès</span>
+    <h1 class="result-title">Merci pour votre commande !</h1>
+
+    <p class="result-lead">
+      Votre commande a bien été enregistrée et transmise à nos artisans pour préparation.
+    </p>
+
+    <div class="order-ref-box">
+      <span class="ref-label">Numéro de référence :</span>
+      <strong class="ref-value">{{ order?.orderNumber || orderNumber }}</strong>
+    </div>
+
+    <!-- ORDER SUMMARY SNAPSHOT -->
+    <div class="order-details-snapshot" *ngIf="order">
+      <h3>Détails de la commande</h3>
+
+      <div class="snapshot-items">
+        <div class="snapshot-row" *ngFor="let item of order.items">
+          <div class="snapshot-item-info">
+            <span class="snapshot-item-name">{{ item.name }}</span>
+            <span class="snapshot-item-qty">Qté : {{ item.quantity }}</span>
+          </div>
+          <span class="snapshot-item-price">
+            {{ item.subtotal | currency:'EUR':'symbol':'1.2-2' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="snapshot-total-row">
+        <span>Montant total réglé</span>
+        <strong>{{ order.total | currency:'EUR':'symbol':'1.2-2' }}</strong>
+      </div>
+    </div>
+
+    <div class="email-note">
+      <p>Un récapitulatif détaillé a été expédié à l'adresse indiquée lors de la commande.</p>
+    </div>
+
+    <div class="result-actions">
+      <a routerLink="/orders" class="btn btn-primary">
+        Voir mes commandes
+      </a>
+      <a routerLink="/products" class="btn btn-outline">
+        Poursuivre mes achats
+      </a>
+    </div>
+  </div>
+</div>

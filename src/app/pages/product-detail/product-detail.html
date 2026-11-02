@@ -1,0 +1,170 @@
+<div class="product-detail-page container">
+  <!-- BREADCRUMBS -->
+  <nav class="breadcrumb-nav" aria-label="Fil d'ariane">
+    <a routerLink="/">Accueil</a>
+    <span class="bc-sep">/</span>
+    <a routerLink="/products">Catalogue</a>
+    <span class="bc-sep">/</span>
+    <a
+      *ngIf="product?.categorie"
+      [routerLink]="['/products']"
+      [queryParams]="{ category: product?.categorie?.slug || product?.categorie?.id }"
+    >
+      {{ product?.categorie?.name }}
+    </a>
+    <span class="bc-sep" *ngIf="product?.categorie">/</span>
+    <span class="bc-current" *ngIf="product">{{ product.name }}</span>
+  </nav>
+
+  <!-- LOADING SPINNER -->
+  <app-loading-spinner *ngIf="loading" [fullPage]="true" message="Préparation de la pièce d'exception..." />
+
+  <!-- NOT FOUND STATE -->
+  <app-empty-state
+    *ngIf="!loading && !product"
+    icon="✕"
+    title="Création introuvable"
+    description="Cette pièce n’existe pas ou n’est plus disponible dans notre collection."
+    actionText="Retourner au catalogue"
+    actionUrl="/products"
+  />
+
+  <!-- MAIN PRODUCT VIEW -->
+  <div class="product-layout" *ngIf="!loading && product">
+    <!-- PRODUCT MEDIA / GALLERY -->
+    <div class="gallery-wrapper">
+      <div class="main-media-frame">
+        <img
+          *ngIf="imageUrl; else detailPlaceholder"
+          [src]="imageUrl"
+          [alt]="product.name"
+          class="detail-image"
+        />
+        <ng-template #detailPlaceholder>
+          <div class="detail-placeholder">
+            <span class="detail-brand">eshop.</span>
+            <p>Maison d'Art de Vivre</p>
+          </div>
+        </ng-template>
+
+        <span *ngIf="product.featured" class="badge-featured">Coup de cœur</span>
+      </div>
+    </div>
+
+    <!-- PRODUCT INFORMATION & PURCHASE -->
+    <div class="info-wrapper">
+      <div class="category-tag" *ngIf="product.categorie?.name">
+        {{ product.categorie?.name }}
+      </div>
+
+      <h1 class="product-title">{{ product.name }}</h1>
+
+      <div class="price-stock-row">
+        <div class="detail-price">
+          {{ product.price | currency:'EUR':'symbol':'1.2-2' }}
+        </div>
+
+        <div class="stock-badge">
+          <span *ngIf="!isOutOfStock" class="badge badge-success">
+            ● En stock ({{ product.stock }} disponible{{ product.stock! > 1 ? 's' : '' }})
+          </span>
+          <span *ngIf="isOutOfStock" class="badge badge-danger">
+            ● Épuisé
+          </span>
+        </div>
+      </div>
+
+      <div class="product-sku" *ngIf="product.sku">
+        <span>Référence : </span><strong>{{ product.sku }}</strong>
+      </div>
+
+      <hr class="divider" />
+
+      <!-- DESCRIPTION -->
+      <div class="description-section">
+        <h3>Description</h3>
+        <p class="description-body">{{ product.description }}</p>
+      </div>
+
+      <!-- PURCHASE ACTIONS -->
+      <div class="purchase-box" *ngIf="!isOutOfStock">
+        <div class="quantity-selector">
+          <label for="qty" class="form-label">Quantité</label>
+          <div class="qty-controls">
+            <button
+              type="button"
+              class="qty-btn"
+              (click)="decrementQuantity()"
+              [disabled]="quantity <= 1"
+              aria-label="Diminuer la quantité"
+            >
+              −
+            </button>
+            <span class="qty-value" id="qty">{{ quantity }}</span>
+            <button
+              type="button"
+              class="qty-btn"
+              (click)="incrementQuantity()"
+              [disabled]="quantity >= (product.stock || 99)"
+              aria-label="Augmenter la quantité"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary btn-lg add-cart-btn"
+          (click)="addToCart()"
+        >
+          <span>Ajouter au panier</span>
+          <span class="btn-price-sub">
+            · {{ (product.price * quantity) | currency:'EUR':'symbol':'1.2-2' }}
+          </span>
+        </button>
+      </div>
+
+      <div *ngIf="isOutOfStock" class="out-of-stock-box">
+        <p>Cette création est actuellement en rupture de stock dans nos ateliers.</p>
+      </div>
+
+      <!-- TRUST REASSURANCES -->
+      <div class="guarantees-grid">
+        <div class="guarantee-item">
+          <span>📦</span>
+          <div>
+            <strong>Expédition soignée</strong>
+            <p>Livraison sécurisée sous 3 à 5 jours ouvrés.</p>
+          </div>
+        </div>
+        <div class="guarantee-item">
+          <span>↺</span>
+          <div>
+            <strong>Retours simples</strong>
+            <p>30 jours pour changer d'avis.</p>
+          </div>
+        </div>
+        <div class="guarantee-item">
+          <span>🌿</span>
+          <div>
+            <strong>Authenticité garantie</strong>
+            <p>Matériaux certifiés écoresponsables.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RELATED PRODUCTS SECTION -->
+  <section class="related-section" *ngIf="relatedProducts.length > 0">
+    <div class="section-heading">
+      <span class="section-eyebrow">Harmonie & Associations</span>
+      <h2>Vous aimerez aussi</h2>
+    </div>
+
+    <div class="grid grid-cols-4">
+      <app-product-card *ngFor="let item of relatedProducts" [product]="item" />
+    </div>
+  </section>
+</div>

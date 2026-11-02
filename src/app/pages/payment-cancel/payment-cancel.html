@@ -1,0 +1,28 @@
+<div class="cancel-page container">
+  <div class="card cancel-card">
+    <div class="cancel-icon">↺</div>
+    <span class="cancel-eyebrow">Transaction interrompue</span>
+    <h1>Paiement annulé</h1>
+
+    <p class="cancel-lead">
+      Votre paiement n'a pas été débité. Vos articles sont conservés dans votre panier afin que vous puissiez finaliser votre commande quand vous le souhaitez.
+    </p>
+
+    <div class="order-ref-box" *ngIf="orderNumber">
+      <span>Référence de commande temporaire : </span>
+      <strong>{{ orderNumber }}</strong>
+    </div>
+
+    <div class="cancel-actions">
+      <a routerLink="/checkout" class="btn btn-primary">
+        Reprendre le paiement
+      </a>
+      <a routerLink="/cart" class="btn btn-outline">
+        Retourner au panier
+      </a>
+      <a routerLink="/products" class="btn btn-outline">
+        Continuer le shopping
+      </a>
+    </div>
+  </div>
+</div>

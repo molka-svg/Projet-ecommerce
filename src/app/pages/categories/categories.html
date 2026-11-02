@@ -1,0 +1,45 @@
+<div class="categories-page container">
+  <header class="page-header">
+    <span class="eyebrow">Nos Univers Décoratifs</span>
+    <h1>Toutes les Collections</h1>
+    <p class="lead">
+      Chaque catégorie réunit des pièces sélectionnées pour leur caractère, leur fabrication raisonnée et leur élégance naturelle.
+    </p>
+  </header>
+
+  <app-loading-spinner *ngIf="loading" message="Chargement des collections..." />
+
+  <app-empty-state
+    *ngIf="!loading && categories.length === 0"
+    icon="📂"
+    title="Aucune catégorie disponible"
+    description="Les univers de la boutique sont en cours de mise en place."
+    actionText="Voir tout le catalogue"
+    actionUrl="/products"
+  />
+
+  <div class="categories-grid" *ngIf="!loading && categories.length > 0">
+    <article *ngFor="let cat of categories" class="category-card">
+      <div class="category-card-top">
+        <span class="collection-badge">Collection</span>
+        <span class="ornament">✦</span>
+      </div>
+
+      <h2 class="category-title">{{ cat.name }}</h2>
+
+      <p class="category-description" *ngIf="cat.description">
+        {{ cat.description }}
+      </p>
+
+      <div class="category-footer">
+        <a
+          [routerLink]="['/products']"
+          [queryParams]="{ category: cat.slug || cat.id }"
+          class="btn btn-outline btn-sm"
+        >
+          Parcourir la collection →
+        </a>
+      </div>
+    </article>
+  </div>
+</div>

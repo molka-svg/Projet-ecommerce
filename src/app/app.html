@@ -1,0 +1,13 @@
+@if (!isAdminArea()) {
+  <app-navbar />
+}
+
+<main class="main-content">
+  <router-outlet />
+</main>
+
+@if (!isAdminArea()) {
+  <app-footer />
+}
+
+<app-toast />

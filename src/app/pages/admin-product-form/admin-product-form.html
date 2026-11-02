@@ -1,0 +1,70 @@
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <a class="brand" routerLink="/">eshop<span>.</span></a>
+    <p class="sidebar-label">ADMINISTRATION</p>
+    <a class="nav-item" routerLink="/admin">Vue d'ensemble</a>
+    <a class="nav-item active" routerLink="/admin/products">Produits</a>
+    <a class="nav-item" routerLink="/admin/categories">Catégories</a>
+    <a class="nav-item" routerLink="/admin/orders">Commandes</a>
+    <a class="nav-item" routerLink="/">Voir la boutique ↗</a>
+  </aside>
+
+  <main class="admin-main">
+    <a class="secondary-link" routerLink="/admin/products">← Retour aux produits</a>
+    <p class="eyebrow">CATALOGUE</p>
+    <h1>{{ isEdit ? 'Modifier le produit' : 'Ajouter un produit' }}</h1>
+    <p class="muted">Renseignez les informations de l'article.</p>
+
+    @if (loadingProduct) {
+      <p class="muted">Chargement du produit...</p>
+    } @else {
+      <form class="admin-panel form-grid" (ngSubmit)="onSubmit()" novalidate>
+        <h2 class="full">Informations générales</h2>
+        <label class="full">Nom du produit
+          <input name="name" [(ngModel)]="name" placeholder="Ex. Sac en toile" required maxlength="120" />
+        </label>
+        <label class="full">Description
+          <textarea name="description" [(ngModel)]="description" rows="5" placeholder="Décrivez le produit..." required></textarea>
+        </label>
+        <label>Prix (€)
+          <input name="price" type="number" [(ngModel)]="price" min="0" step="0.01" placeholder="29.90" required />
+        </label>
+        <label>Stock
+          <input name="stock" type="number" [(ngModel)]="stock" min="0" step="1" placeholder="0" required />
+        </label>
+        <label>Catégorie
+          <select name="category" [(ngModel)]="categoryId">
+            <option value="">Sans catégorie</option>
+            @for (cat of categories; track cat.documentId) {
+              <option [value]="cat.documentId">{{ cat.name }}</option>
+            }
+          </select>
+        </label>
+        <label>Référence (SKU)
+          <input name="sku" [(ngModel)]="sku" placeholder="Ex. SAC-001" maxlength="40" />
+        </label>
+        <label class="full checkbox-label">
+          <input name="featured" type="checkbox" [(ngModel)]="featured" />
+          Mettre en avant sur la page d'accueil
+        </label>
+        <label class="full">Image du produit (JPG, PNG, WebP — 5 Mo max)
+          <input name="image" type="file" accept="image/png,image/jpeg,image/webp" (change)="onImageSelected($event)" />
+        </label>
+        @if (previewUrl) {
+          <img class="full image-preview" [src]="previewUrl" alt="Aperçu de l'image" />
+        }
+
+        @if (errorMessage) {
+          <p class="full admin-alert error">{{ errorMessage }}</p>
+        }
+
+        <div class="full form-actions">
+          <a class="cancel-link" routerLink="/admin/products">Annuler</a>
+          <button class="primary-button" type="submit" [disabled]="loading">
+            {{ loading ? 'Enregistrement...' : 'Enregistrer le produit' }}
+          </button>
+        </div>
+      </form>
+    }
+  </main>
+</div>

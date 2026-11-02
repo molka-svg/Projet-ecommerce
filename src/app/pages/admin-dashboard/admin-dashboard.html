@@ -1,0 +1,77 @@
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <a class="brand" routerLink="/">eshop<span>.</span></a>
+    <p class="sidebar-label">ADMINISTRATION</p>
+    <a class="nav-item active" routerLink="/admin">Vue d'ensemble</a>
+    <a class="nav-item" routerLink="/admin/products">Produits</a>
+    <a class="nav-item" routerLink="/admin/categories">Catégories</a>
+    <a class="nav-item" routerLink="/admin/orders">Commandes</a>
+    <a class="nav-item" routerLink="/">Voir la boutique ↗</a>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-topbar">
+      <div><p class="eyebrow">ESPACE PRIVÉ</p><h1>Tableau de bord</h1></div>
+      <span class="admin-badge">Administration</span>
+    </header>
+
+    <p class="muted">Bienvenue. Retrouvez ici les principales informations de votre boutique.</p>
+
+    <section class="stat-grid">
+      <article class="stat-card"><span>Produits</span><strong>{{ loading ? '—' : productCount }}</strong><small>au catalogue</small></article>
+      <article class="stat-card"><span>Commandes</span><strong>{{ loading ? '—' : orderCount }}</strong><small>toutes périodes</small></article>
+      <article class="stat-card"><span>Chiffre d'affaires</span><strong>{{ loading ? '—' : (revenue | number: '1.2-2') + ' €' }}</strong><small>commandes payées</small></article>
+    </section>
+
+    <section class="admin-panel">
+      <div class="panel-heading"><div><h2>Actions rapides</h2><p class="muted">Accédez aux outils de gestion.</p></div></div>
+      <div class="quick-actions">
+        <a routerLink="/admin/products/new"><span>＋</span><strong>Ajouter un produit</strong><small>Créer une fiche produit</small></a>
+        <a routerLink="/admin/categories"><span>▦</span><strong>Gérer les catégories</strong><small>Organiser le catalogue</small></a>
+        <a routerLink="/admin/orders"><span>↗</span><strong>Voir les commandes</strong><small>Suivre les achats clients</small></a>
+      </div>
+    </section>
+
+    <section class="admin-panel">
+      <h2>Dernières commandes</h2>
+      @if (recentOrders.length === 0) {
+        <p class="muted">Aucune commande pour le moment.</p>
+      } @else {
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <tbody>
+              @for (order of recentOrders; track order.documentId) {
+                <tr>
+                  <td><strong>{{ order.orderNumber }}</strong></td>
+                  <td>{{ order.createdAt | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ order.customerEmail }}</td>
+                  <td class="num">{{ order.total | number: '1.2-2' }} €</td>
+                  <td><span class="pill" [class.pill-ok]="order.paymentStatus === 'paid'" [class.pill-warn]="order.paymentStatus !== 'paid'">{{ paymentStatusLabels[order.paymentStatus] }}</span></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+
+    @if (lowStock.length > 0) {
+      <section class="admin-panel">
+        <h2>Stock faible</h2>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <tbody>
+              @for (product of lowStock; track product.documentId) {
+                <tr>
+                  <td>{{ product.name }}</td>
+                  <td class="num"><span class="pill" [class.pill-bad]="(product.stock ?? 0) <= 0" [class.pill-warn]="(product.stock ?? 0) > 0">{{ product.stock ?? 0 }}</span></td>
+                  <td><div class="admin-actions"><a class="admin-btn" [routerLink]="['/admin/products', product.documentId, 'edit']">Réapprovisionner</a></div></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+  </main>
+</div>

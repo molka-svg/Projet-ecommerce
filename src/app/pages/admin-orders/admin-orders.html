@@ -1,0 +1,104 @@
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <a class="brand" routerLink="/">eshop<span>.</span></a>
+    <p class="sidebar-label">ADMINISTRATION</p>
+    <a class="nav-item" routerLink="/admin">Vue d'ensemble</a>
+    <a class="nav-item" routerLink="/admin/products">Produits</a>
+    <a class="nav-item" routerLink="/admin/categories">Catégories</a>
+    <a class="nav-item active" routerLink="/admin/orders">Commandes</a>
+    <a class="nav-item" routerLink="/">Voir la boutique ↗</a>
+  </aside>
+
+  <main class="admin-main">
+    <p class="eyebrow">VENTES ET EXPÉDITIONS</p>
+    <h1>Commandes</h1>
+    <p class="muted">Consultez les achats et suivez leur progression.</p>
+
+    <section class="admin-panel">
+      <div class="toolbar">
+        <input type="search" placeholder="N° de commande, e-mail ou nom..." aria-label="Rechercher une commande" [(ngModel)]="searchTerm" />
+        <select aria-label="Filtrer par paiement" [(ngModel)]="paymentFilter">
+          <option value="">Tous les paiements</option>
+          @for (entry of paymentStatusLabels | keyvalue; track entry.key) {
+            <option [value]="entry.key">{{ entry.value }}</option>
+          }
+        </select>
+      </div>
+
+      @if (errorMessage) {
+        <p class="admin-alert error">{{ errorMessage }}</p>
+      }
+
+      @if (loading) {
+        <p class="muted">Chargement des commandes...</p>
+      } @else if (filteredOrders.length === 0) {
+        <div class="empty-table">
+          <span>↗</span>
+          <h2>Aucune commande à afficher</h2>
+          <p class="muted">Les commandes passées sur la boutique apparaîtront ici.</p>
+        </div>
+      } @else {
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Commande</th><th>Date</th><th>Client</th><th class="num">Total</th><th>Paiement</th><th>Statut</th><th></th></tr>
+            </thead>
+            <tbody>
+              @for (order of filteredOrders; track order.documentId) {
+                <tr>
+                  <td><strong>{{ order.orderNumber }}</strong></td>
+                  <td>{{ order.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ order.customerName || '—' }}<br /><small class="muted">{{ order.customerEmail }}</small></td>
+                  <td class="num">{{ order.total | number: '1.2-2' }} €</td>
+                  <td>
+                    <span class="pill"
+                      [class.pill-ok]="order.paymentStatus === 'paid'"
+                      [class.pill-warn]="order.paymentStatus === 'pending'"
+                      [class.pill-bad]="order.paymentStatus === 'failed' || order.paymentStatus === 'cancelled'">
+                      {{ paymentStatusLabels[order.paymentStatus] }}
+                    </span>
+                  </td>
+                  <td>
+                    <select class="status-select" [ngModel]="order.orderStatus" (ngModelChange)="changeStatus(order, $event)" [attr.aria-label]="'Statut de ' + order.orderNumber">
+                      @for (status of orderStatuses; track status) {
+                        <option [value]="status">{{ orderStatusLabels[status] }}</option>
+                      }
+                    </select>
+                  </td>
+                  <td><button class="admin-btn" type="button" (click)="toggle(order)">{{ expandedId === order.documentId ? 'Masquer' : 'Détail' }}</button></td>
+                </tr>
+                @if (expandedId === order.documentId) {
+                  <tr class="detail-row">
+                    <td colspan="7">
+                      <div class="order-detail">
+                        <div>
+                          <strong>Articles</strong>
+                          <ul>
+                            @for (item of order.items; track item.productId) {
+                              <li>{{ item.quantity }} × {{ item.name }} — {{ item.subtotal | number: '1.2-2' }} €</li>
+                            }
+                          </ul>
+                        </div>
+                        @if (order.shippingAddress; as addr) {
+                          <div>
+                            <strong>Livraison</strong>
+                            <p class="muted">
+                              {{ addr.firstName }} {{ addr.lastName }}<br />
+                              {{ addr.address }}<br />
+                              {{ addr.postalCode }} {{ addr.city }}, {{ addr.country }}
+                              @if (addr.phone) { <br />Tél. {{ addr.phone }} }
+                            </p>
+                          </div>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </main>
+</div>

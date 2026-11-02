@@ -1,0 +1,137 @@
+<header class="navbar-wrapper">
+  <div class="top-announcement">
+    <span>Livraison offerte en France métropolitaine dès 80€ d'achat</span>
+  </div>
+
+  <nav class="navbar-main container" aria-label="Navigation principale">
+    <div class="nav-left">
+      <button
+        type="button"
+        class="mobile-toggle"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="mobileMenuOpen"
+        aria-label="Menu"
+      >
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <a routerLink="/" class="brand-logo" (click)="closeMobileMenu()">
+        eshop<span class="brand-dot">.</span>
+      </a>
+    </div>
+
+    <!-- Desktop Navigation Links -->
+    <ul class="nav-links desktop-only">
+      <li>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
+      </li>
+      <li>
+        <a routerLink="/products" routerLinkActive="active">Catalogue</a>
+      </li>
+      <li>
+        <a routerLink="/categories" routerLinkActive="active">Catégories</a>
+      </li>
+      <li *ngIf="authService.isAdmin">
+        <a routerLink="/admin" routerLinkActive="active" class="admin-badge-link">
+          Administration
+        </a>
+      </li>
+    </ul>
+
+    <!-- Search Form -->
+    <form class="nav-search desktop-only" (ngSubmit)="onSearch()">
+      <div class="search-input-wrapper">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input
+          type="search"
+          name="searchQuery"
+          [(ngModel)]="searchQuery"
+          placeholder="Rechercher un objet, mobilier..."
+          aria-label="Rechercher sur le site"
+          class="search-input"
+        />
+      </div>
+    </form>
+
+    <!-- User & Cart Actions -->
+    <div class="nav-actions">
+      <!-- Auth Links -->
+      <ng-container *ngIf="authService.isAuthenticated$ | async; else guestNav">
+        <div class="user-menu-wrapper desktop-only">
+          <a routerLink="/profile" class="nav-icon-link" title="Mon Profil">
+            <span class="icon">👤</span>
+            <span class="user-name">{{ (authService.currentUser$ | async)?.firstName || (authService.currentUser$ | async)?.username || 'Mon compte' }}</span>
+          </a>
+        </div>
+        <a routerLink="/orders" class="nav-icon-link desktop-only" title="Mes Commandes">
+          Commandes
+        </a>
+      </ng-container>
+
+      <ng-template #guestNav>
+        <div class="guest-links desktop-only">
+          <a routerLink="/login" class="nav-link">Connexion</a>
+          <a routerLink="/register" class="btn btn-sm btn-outline">Inscription</a>
+        </div>
+      </ng-template>
+
+      <!-- Cart Button -->
+      <a routerLink="/cart" class="cart-button" aria-label="Panier d'achat">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-label desktop-only">Panier</span>
+        <span class="cart-badge" *ngIf="(cartService.count$ | async) as count">
+          {{ count }}
+        </span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer" [class.open]="mobileMenuOpen" *ngIf="mobileMenuOpen">
+    <div class="mobile-drawer-content">
+      <form class="mobile-search" (ngSubmit)="onSearch()">
+        <input
+          type="search"
+          name="mSearch"
+          [(ngModel)]="searchQuery"
+          placeholder="Rechercher..."
+          class="form-input"
+        />
+        <button type="submit" class="btn btn-primary btn-sm">OK</button>
+      </form>
+
+      <ul class="mobile-nav-links">
+        <li><a routerLink="/" (click)="closeMobileMenu()">Accueil</a></li>
+        <li><a routerLink="/products" (click)="closeMobileMenu()">Catalogue complet</a></li>
+        <li><a routerLink="/categories" (click)="closeMobileMenu()">Catégories</a></li>
+        <li *ngFor="let cat of categories">
+          <a [routerLink]="['/products']" [queryParams]="{ category: cat.slug || cat.id }" (click)="closeMobileMenu()">
+            ↳ {{ cat.name }}
+          </a>
+        </li>
+
+        <li class="divider"></li>
+
+        <ng-container *ngIf="authService.isAuthenticated$ | async; else mobileGuest">
+          <li><a routerLink="/profile" (click)="closeMobileMenu()">Mon Profil</a></li>
+          <li><a routerLink="/orders" (click)="closeMobileMenu()">Mes Commandes</a></li>
+          <li *ngIf="authService.isAdmin">
+            <a routerLink="/admin" (click)="closeMobileMenu()">Back-Office Admin</a>
+          </li>
+          <li>
+            <button type="button" class="btn btn-outline btn-sm w-full" (click)="logout()">
+              Déconnexion
+            </button>
+          </li>
+        </ng-container>
+
+        <ng-template #mobileGuest>
+          <li><a routerLink="/login" (click)="closeMobileMenu()">Connexion</a></li>
+          <li><a routerLink="/register" (click)="closeMobileMenu()">Créer un compte</a></li>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+</header>

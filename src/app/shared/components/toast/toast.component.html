@@ -1,0 +1,24 @@
+<aside class="toast-container" aria-live="polite" aria-atomic="true">
+  <div
+    *ngFor="let msg of messages$ | async"
+    class="toast-item"
+    [ngClass]="'toast-' + msg.type"
+    role="alert"
+  >
+    <div class="toast-icon">
+      <span *ngIf="msg.type === 'success'">✓</span>
+      <span *ngIf="msg.type === 'error'">✕</span>
+      <span *ngIf="msg.type === 'warning'">⚠</span>
+      <span *ngIf="msg.type === 'info'">ℹ</span>
+    </div>
+    <div class="toast-text">{{ msg.text }}</div>
+    <button
+      type="button"
+      class="toast-close"
+      (click)="notificationService.remove(msg.id)"
+      aria-label="Fermer"
+    >
+      ×
+    </button>
+  </div>
+</aside>

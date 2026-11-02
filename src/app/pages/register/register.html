@@ -1,0 +1,95 @@
+<div class="auth-page container">
+  <div class="card auth-card">
+    <header class="auth-header">
+      <span class="auth-eyebrow">Bienvenue chez eshop</span>
+      <h1>Créer un Compte</h1>
+      <p>Rejoignez notre communauté d'amateurs d'artisanat et de design d'intérieur.</p>
+    </header>
+
+    <div *ngIf="errorMessage" class="alert alert-error">
+      <span>⚠ {{ errorMessage }}</span>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="username" class="form-label">Identifiant (pseudo unique) *</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          [(ngModel)]="username"
+          required
+          class="form-input"
+          placeholder="Ex: alex_martin"
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="form-label">Adresse e-mail *</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          [(ngModel)]="email"
+          required
+          class="form-input"
+          placeholder="votre.email@exemple.fr"
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Mot de passe (min. 6 caractères) *</label>
+        <div class="password-input-wrapper">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            class="form-input"
+            autocomplete="new-password"
+          />
+          <button
+            type="button"
+            class="toggle-visibility-btn"
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+          >
+            {{ showPassword ? '👁' : '👁‍🗨' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword" class="form-label">Confirmer le mot de passe *</label>
+        <input
+          [type]="showPassword ? 'text' : 'password'"
+          id="confirmPassword"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          required
+          class="form-input"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-lg w-full mt-md"
+        [disabled]="loading"
+      >
+        <span *ngIf="!loading">Créer mon compte</span>
+        <span *ngIf="loading">Création en cours...</span>
+      </button>
+    </form>
+
+    <footer class="auth-footer">
+      <p>
+        Déjà un compte ?
+        <a routerLink="/login" class="login-link">Se connecter</a>
+      </p>
+    </footer>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <a class="brand" routerLink="/">eshop<span>.</span></a>
+    <p class="sidebar-label">ADMINISTRATION</p>
+    <a class="nav-item" routerLink="/admin">Vue d'ensemble</a>
+    <a class="nav-item active" routerLink="/admin/products">Produits</a>
+    <a class="nav-item" routerLink="/admin/categories">Catégories</a>
+    <a class="nav-item" routerLink="/admin/orders">Commandes</a>
+    <a class="nav-item" routerLink="/">Voir la boutique ↗</a>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-topbar">
+      <div><p class="eyebrow">CATALOGUE</p><h1>Produits</h1><p class="muted">Gérez les articles proposés dans la boutique.</p></div>
+      <a class="primary-link" routerLink="/admin/products/new">＋ Ajouter un produit</a>
+    </header>
+
+    <section class="admin-panel">
+      <div class="toolbar">
+        <input type="search" placeholder="Rechercher par nom ou référence..." aria-label="Rechercher un produit" [(ngModel)]="searchTerm" />
+        <select aria-label="Filtrer par stock" [(ngModel)]="stockFilter">
+          <option value="">Tous les stocks</option>
+          <option value="in">En stock</option>
+          <option value="low">Stock faible (≤ {{ lowStockThreshold }})</option>
+          <option value="out">Rupture</option>
+        </select>
+      </div>
+
+      @if (errorMessage) {
+        <p class="admin-alert error">{{ errorMessage }}</p>
+      }
+
+      @if (loading) {
+        <app-loading-spinner message="Chargement du catalogue..." />
+      } @else if (filteredProducts.length === 0) {
+        <div class="empty-table">
+          <span>▦</span>
+          <h2>Aucun produit</h2>
+          <p class="muted">Ajoutez votre premier article ou modifiez vos filtres.</p>
+        </div>
+      } @else {
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Produit</th>
+                <th>Catégorie</th>
+                <th class="num">Prix</th>
+                <th class="num">Stock</th>
+                <th>Vedette</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (product of filteredProducts; track product.documentId) {
+                <tr>
+                  <td>
+                    @if (mediaUrl(product.Image); as img) {
+                      <img class="admin-thumb" [src]="img" [alt]="product.name" />
+                    } @else {
+                      <div class="admin-thumb"></div>
+                    }
+                  </td>
+                  <td>
+                    <strong>{{ product.name }}</strong>
+                    @if (product.sku) {
+                      <br /><small class="muted">Réf. {{ product.sku }}</small>
+                    }
+                  </td>
+                  <td>{{ product.categorie?.name || '—' }}</td>
+                  <td class="num">{{ product.price | number: '1.2-2' }} €</td>
+                  <td class="num">
+                    <span
+                      class="pill"
+                      [class.pill-bad]="(product.stock ?? 0) <= 0"
+                      [class.pill-warn]="(product.stock ?? 0) > 0 && (product.stock ?? 0) <= lowStockThreshold"
+                      [class.pill-ok]="(product.stock ?? 0) > lowStockThreshold"
+                    >
+                      {{ product.stock ?? 0 }}
+                    </span>
+                  </td>
+                  <td>{{ product.featured ? '★' : '' }}</td>
+                  <td>
+                    <div class="admin-actions">
+                      <a class="admin-btn" [routerLink]="['/admin/products', product.documentId, 'edit']">Modifier</a>
+                      <button class="admin-btn danger" type="button" (click)="askDelete(product)">Supprimer</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </main>
+</div>
+
+<app-confirmation-modal
+  [isOpen]="!!productToDelete"
+  title="Supprimer ce produit ?"
+  [message]="'Le produit « ' + (productToDelete?.name ?? '') + ' » sera définitivement supprimé.'"
+  [confirmText]="deleting ? 'Suppression...' : 'Supprimer'"
+  (confirmed)="confirmDelete()"
+  (cancelled)="productToDelete = null"
+/>

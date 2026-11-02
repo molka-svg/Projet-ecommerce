@@ -1,0 +1,163 @@
+.catalogue-page {
+  padding: 3.5rem 1.5rem 5rem;
+}
+
+.catalogue-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 3rem;
+}
+
+.catalogue-eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.catalogue-title {
+  margin-bottom: 0.75rem;
+}
+
+.catalogue-lead {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* Category Pills */
+.category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-bottom: 2.5rem;
+}
+
+.pill-btn {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.5rem 1.15rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pill-btn:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-sage-light);
+}
+
+.pill-btn.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #FFFFFF;
+}
+
+/* Controls Bar */
+.controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.controls-search {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  max-width: 380px;
+}
+
+.search-input {
+  background-color: var(--bg-color);
+}
+
+.controls-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.price-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.price-input {
+  width: 90px;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.88rem;
+  background-color: var(--bg-color);
+}
+
+.price-separator {
+  color: var(--color-text-muted);
+}
+
+.sort-select {
+  width: 170px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.88rem;
+  background-color: var(--bg-color);
+}
+
+.reset-btn {
+  color: var(--color-error);
+  border-color: #f6c8c4;
+}
+
+.results-meta {
+  margin-bottom: 2rem;
+  font-size: 0.92rem;
+  color: var(--color-text-muted);
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+/* Pagination */
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.page-indicator {
+  font-size: 0.92rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .controls-search {
+    max-width: 100%;
+  }
+  .controls-filters {
+    justify-content: space-between;
+  }
+}

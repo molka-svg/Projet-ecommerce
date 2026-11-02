@@ -1,0 +1,147 @@
+<!-- HERO SECTION -->
+<section class="hero-section">
+  <div class="container hero-container">
+    <div class="hero-content">
+      <span class="hero-eyebrow">Nouvelle Collection Automne 2026</span>
+      <h1 class="hero-title">L’art d’habiter le beau au quotidien.</h1>
+      <p class="hero-subtitle">
+        Des créations singulières, conçues par des artisans d’exception. Mobilier en essences massives, luminaires sculpturaux et grès chamotté.
+      </p>
+      <div class="hero-cta-group">
+        <a routerLink="/products" class="btn btn-primary btn-lg">
+          Explorer le catalogue
+        </a>
+        <a routerLink="/categories" class="btn btn-outline btn-lg">
+          Voir les collections
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-card-badge">
+        <span class="badge-accent">Artisanat Européen</span>
+        <p>Matières brutes, finitions pérennes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUE PROPOSITIONS -->
+<section class="value-props-section">
+  <div class="container value-props-grid">
+    <div class="prop-item">
+      <span class="prop-icon">✦</span>
+      <div class="prop-text">
+        <h4>Savoir-Faire Artisanal</h4>
+        <p>Pièces uniques confectionnées en ateliers européens.</p>
+      </div>
+    </div>
+    <div class="prop-item">
+      <span class="prop-icon">📦</span>
+      <div class="prop-text">
+        <h4>Livraison Soignée</h4>
+        <p>Emballages zéro plastique et transport sécurisé.</p>
+      </div>
+    </div>
+    <div class="prop-item">
+      <span class="prop-icon">🔒</span>
+      <div class="prop-text">
+        <h4>Paiement 100% Sécurisé</h4>
+        <p>Transactions chiffrées de bout en bout via Stripe.</p>
+      </div>
+    </div>
+    <div class="prop-item">
+      <span class="prop-icon">↺</span>
+      <div class="prop-text">
+        <h4>Retours Sous 30 Jours</h4>
+        <p>Essai serein chez vous sans aucune complication.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED CATEGORIES -->
+<section class="home-section container">
+  <div class="section-header">
+    <div>
+      <span class="section-eyebrow">Nos Univers</span>
+      <h2 class="section-title">Collections en lumière</h2>
+    </div>
+    <a routerLink="/categories" class="section-link">
+      Toutes les catégories →
+    </a>
+  </div>
+
+  <app-loading-spinner *ngIf="loadingCategories" message="Chargement des collections..." />
+
+  <div class="category-cards-grid" *ngIf="!loadingCategories">
+    <a
+      *ngFor="let cat of categories"
+      [routerLink]="['/products']"
+      [queryParams]="{ category: cat.slug || cat.id }"
+      class="cat-card"
+    >
+      <div class="cat-card-body">
+        <span class="cat-eyebrow">Collection</span>
+        <h3 class="cat-name">{{ cat.name }}</h3>
+        <p class="cat-desc" *ngIf="cat.description">{{ cat.description }}</p>
+        <span class="cat-action">Découvrir →</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="home-section featured-bg">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <span class="section-eyebrow">Sélection Éditoriale</span>
+        <h2 class="section-title">Nos coups de cœur</h2>
+      </div>
+      <a routerLink="/products" [queryParams]="{ featured: true }" class="section-link">
+        Tout voir →
+      </a>
+    </div>
+
+    <app-loading-spinner *ngIf="loadingFeatured" message="Chargement de notre sélection..." />
+
+    <div class="grid grid-cols-4" *ngIf="!loadingFeatured && featuredProducts.length > 0">
+      <app-product-card *ngFor="let prod of featuredProducts" [product]="prod" />
+    </div>
+  </div>
+</section>
+
+<!-- EDITORIAL BANNER -->
+<section class="container editorial-banner">
+  <div class="editorial-card">
+    <div class="editorial-content">
+      <span class="editorial-tag">Manifeste</span>
+      <h2>Lenteur, matières et longévité.</h2>
+      <p>
+        Chaque meuble et chaque objet présent sur eshop est choisi pour son authenticité formelle. Nous refusons l'éphémère pour valoriser des pièces qui traversent les décennies et s'embellissent avec le temps.
+      </p>
+      <a routerLink="/products" class="btn btn-secondary">
+        Explorer le vestiaire de maison
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- NEW ARRIVALS -->
+<section class="home-section container">
+  <div class="section-header">
+    <div>
+      <span class="section-eyebrow">Dernières Arrivées</span>
+      <h2 class="section-title">Nouveautés de la saison</h2>
+    </div>
+    <a routerLink="/products" class="section-link">
+      Catalogue complet →
+    </a>
+  </div>
+
+  <app-loading-spinner *ngIf="loadingNew" message="Chargement des nouveautés..." />
+
+  <div class="grid grid-cols-4" *ngIf="!loadingNew && newArrivals.length > 0">
+    <app-product-card *ngFor="let prod of newArrivals" [product]="prod" />
+  </div>
+</section>

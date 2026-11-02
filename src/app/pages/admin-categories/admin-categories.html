@@ -1,0 +1,84 @@
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <a class="brand" routerLink="/">eshop<span>.</span></a>
+    <p class="sidebar-label">ADMINISTRATION</p>
+    <a class="nav-item" routerLink="/admin">Vue d'ensemble</a>
+    <a class="nav-item" routerLink="/admin/products">Produits</a>
+    <a class="nav-item active" routerLink="/admin/categories">Catégories</a>
+    <a class="nav-item" routerLink="/admin/orders">Commandes</a>
+    <a class="nav-item" routerLink="/">Voir la boutique ↗</a>
+  </aside>
+
+  <main class="admin-main">
+    <p class="eyebrow">ORGANISATION DU CATALOGUE</p>
+    <h1>Catégories</h1>
+    <p class="muted">Organisez les produits pour aider les clients à les découvrir.</p>
+
+    <section class="admin-panel">
+      <h2>{{ editingId ? 'Modifier la catégorie' : 'Nouvelle catégorie' }}</h2>
+      <form class="category-form" (ngSubmit)="onSubmit()" novalidate>
+        <label>Nom de la catégorie
+          <input name="name" [(ngModel)]="name" placeholder="Ex. Accessoires" required maxlength="80" />
+        </label>
+        <label>Description
+          <textarea name="description" [(ngModel)]="description" rows="3" placeholder="Description facultative"></textarea>
+        </label>
+        @if (errorMessage) {
+          <p class="admin-alert error">{{ errorMessage }}</p>
+        }
+        <div class="form-buttons">
+          <button class="primary-button" type="submit" [disabled]="loading">
+            {{ loading ? 'Enregistrement...' : editingId ? 'Enregistrer' : 'Ajouter la catégorie' }}
+          </button>
+          @if (editingId) {
+            <button class="admin-btn" type="button" (click)="resetForm()">Annuler</button>
+          }
+        </div>
+      </form>
+    </section>
+
+    <section class="admin-panel">
+      <h2>Catégories existantes ({{ categories.length }})</h2>
+      @if (loadingList) {
+        <p class="muted">Chargement...</p>
+      } @else if (categories.length === 0) {
+        <div class="empty-table">
+          <span>▦</span>
+          <p class="muted">Aucune catégorie pour le moment.</p>
+        </div>
+      } @else {
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Nom</th><th>Slug</th><th>Description</th><th></th></tr>
+            </thead>
+            <tbody>
+              @for (cat of categories; track cat.documentId) {
+                <tr>
+                  <td><strong>{{ cat.name }}</strong></td>
+                  <td class="muted">{{ cat.slug }}</td>
+                  <td class="muted">{{ cat.description || '—' }}</td>
+                  <td>
+                    <div class="admin-actions">
+                      <button class="admin-btn" type="button" (click)="edit(cat)">Modifier</button>
+                      <button class="admin-btn danger" type="button" (click)="categoryToDelete = cat">Supprimer</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </main>
+</div>
+
+<app-confirmation-modal
+  [isOpen]="!!categoryToDelete"
+  title="Supprimer cette catégorie ?"
+  [message]="'La catégorie « ' + (categoryToDelete?.name ?? '') + ' » sera supprimée. Les produits associés seront conservés, sans catégorie.'"
+  confirmText="Supprimer"
+  (confirmed)="confirmDelete()"
+  (cancelled)="categoryToDelete = null"
+/>
