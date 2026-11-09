@@ -40,6 +40,8 @@ export const routes: Routes = [
   {
     path: 'checkout',
     title: 'Paiement — eshop.',
+    // Il faut être connecté pour commander : sinon → /login, puis retour ici.
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/checkout/checkout').then((m) => m.CheckoutComponent),
   },
   {

@@ -90,6 +90,14 @@
   background-color: #ECE8DF;
 }
 
+.developer-credit {
+  margin-top: 0.25rem;
+}
+
+.developer-credit strong {
+  color: var(--color-primary);
+}
+
 .footer-bottom-inner {
   display: flex;
   align-items: center;

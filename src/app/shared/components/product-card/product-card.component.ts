@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Product } from '../../../models/product.model';
@@ -6,6 +6,7 @@ import { CartService } from '../../../core/services/cart.service';
 import { ProductService } from '../../../core/services/product.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-product-card',
   standalone: true,
   imports: [CommonModule, RouterLink],

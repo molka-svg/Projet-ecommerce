@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { catchError, forkJoin, of } from 'rxjs';
@@ -8,6 +8,7 @@ import { Order, PAYMENT_STATUS_LABELS } from '../../models/order.model';
 import { Product } from '../../models/product.model';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Eager,
   selector: 'app-admin-dashboard',
   standalone: true,
   imports: [CommonModule, RouterLink],
