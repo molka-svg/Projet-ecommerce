@@ -15,6 +15,7 @@
     "customerEmail": { "type": "email", "required": true },
     "customerName": { "type": "string" },
     "items": { "type": "json", "required": true },
+    "quantity": { "type": "integer", "min": 0, "default": 0 },
     "subtotal": { "type": "decimal", "required": true },
     "shipping": { "type": "decimal", "default": 0 },
     "total": { "type": "decimal", "required": true },
