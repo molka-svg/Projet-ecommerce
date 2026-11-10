@@ -45,3 +45,12 @@ Thumbs.db
 
 # Ancien clone du dépôt (ne pas versionner)
 /Projet-ecommerce/
+
+# Backend Strapi (sécurité en plus de backend/.gitignore)
+/backend/.env
+/backend/node_modules/
+/backend/.tmp/
+/backend/.strapi/
+/backend/dist/
+/backend/public/uploads/*
+!/backend/public/uploads/.gitkeep

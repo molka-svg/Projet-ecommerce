@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "Produit",
+    "description": "Articles vendus dans la boutique"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": { "type": "string", "required": true, "maxLength": 120 },
+    "slug": { "type": "uid", "targetField": "name" },
+    "description": { "type": "text" },
+    "price": { "type": "decimal", "required": true, "min": 0 },
+    "stock": { "type": "integer", "required": true, "default": 0, "min": 0 },
+    "sku": { "type": "string", "unique": true, "maxLength": 40 },
+    "featured": { "type": "boolean", "default": false },
+    "Image": { "type": "media", "multiple": false, "allowedTypes": ["images"] },
+    "images": { "type": "media", "multiple": true, "allowedTypes": ["images"] },
+    "categorie": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "products"
+    }
+  }
+}

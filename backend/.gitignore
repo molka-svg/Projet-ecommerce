@@ -1,0 +1,58 @@
+############################
+# Secrets — NE JAMAIS VERSIONNER
+############################
+.env
+.env.*
+!.env.example
+
+############################
+# Dépendances
+############################
+node_modules/
+
+############################
+# Base de données SQLite et fichiers temporaires
+############################
+.tmp/
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+
+############################
+# Fichiers envoyés via l'admin (images produits)
+############################
+public/uploads/*
+!public/uploads/.gitkeep
+
+############################
+# Build et fichiers générés par Strapi
+############################
+dist/
+build/
+.strapi/
+.strapi-updater.json
+.strapi-cloud.json
+exports/
+license.txt
+.tsbuildinfo
+.eslintcache
+
+############################
+# Logs
+############################
+*.log
+logs/
+npm-debug.log*
+yarn-error.log
+coverage/
+
+############################
+# Éditeurs et systèmes
+############################
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+Desktop.ini

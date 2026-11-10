@@ -1,0 +1,40 @@
+const allowedMediaTypes = [
+  'image/*',
+  'video/*',
+  'audio/*',
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.*',
+  'text/plain',
+  'text/csv',
+];
+
+const deniedTypes = [
+  'image/svg+xml',
+  'application/vnd.microsoft.portable-executable',
+  'application/x-msdownload',
+  'application/x-msdos-program',
+  'application/x-executable',
+  'application/x-dosexec',
+  'application/x-sh',
+  'text/x-shellscript',
+  'application/x-mach-binary',
+];
+
+module.exports = () => ({
+  'users-permissions': {
+    config: {
+      // JWT classique (7 jours) : simple à gérer côté Angular, sans refresh-token.
+      jwtManagement: 'legacy-support',
+      jwt: { expiresIn: '7d' },
+    },
+  },
+  upload: {
+    config: {
+      security: {
+        allowedTypes: allowedMediaTypes,
+        deniedTypes,
+      },
+    },
+  },
+});

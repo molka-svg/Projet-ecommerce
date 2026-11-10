@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "ES2021",
+    "checkJs": false,
+    "allowJs": true
+  },
+  "include": ["src/**/*", "config/**/*"],
+  "exclude": ["node_modules", "build", "dist", ".cache", ".tmp", ".strapi", "public", "src/admin"]
+}
