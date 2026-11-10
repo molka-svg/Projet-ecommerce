@@ -3,11 +3,11 @@
 Site e-commerce complet :
 
 - **Frontend** : Angular 22 + Tailwind CSS (ce dossier)
-- **Backend** : Strapi 5 + SQLite (dossier [`backend/`](backend/README.md))
+- **Backend** : Strapi 5 (dossier [`backend/`](backend/README.md))
 - **Paiement** : Stripe Checkout (mode test)
 
 ```
-Navigateur (Angular :4200)  ──HTTP/JSON + JWT──►  Strapi (:1337/api)  ──►  SQLite
+Navigateur (Angular :4200)  ──HTTP/JSON + JWT──►  Strapi (:1337/api)  ──►  Base de données
                                                         │
                                                         └──►  Stripe
 ```

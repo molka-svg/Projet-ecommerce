@@ -1,6 +1,6 @@
 # Backend — API Strapi (E-shop)
 
-API REST du site e-commerce, développée avec **Strapi 5** et une base **SQLite**.
+API REST du site e-commerce, développée avec **Strapi 5**.
 Elle gère les produits, les catégories, les utilisateurs (authentification JWT), les commandes et le paiement **Stripe**.
 
 ## Prérequis
