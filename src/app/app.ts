@@ -1,3 +1,7 @@
+/**
+ * eshop — Projet e-commerce (Angular + Strapi)
+ * Développé par FERCHICHI Molka
+ */
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';

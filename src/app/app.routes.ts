@@ -1,3 +1,7 @@
+/**
+ * eshop — Projet e-commerce (Angular + Strapi)
+ * Développé par FERCHICHI Molka
+ */
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';

@@ -1,6 +1,7 @@
 {
   "name": "ecommerce-frontend",
   "version": "0.0.0",
+  "author": "FERCHICHI Molka",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
