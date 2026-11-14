@@ -1,5 +1,7 @@
 # E-shop — Projet e-commerce
 
+> Développé par **FERCHICHI Molka**
+
 Site e-commerce complet :
 
 - **Frontend** : Angular 22 + Tailwind CSS (ce dossier)
@@ -114,3 +116,7 @@ L'URL de l'API est définie dans `src/environments/environment.ts` (`http://loca
 | Le site s'affiche mais aucun produit | Le backend n'est pas lancé (`cd backend && npm run develop`) |
 | Erreur CORS | Vérifier `CORS_ORIGINS=http://localhost:4200` dans `backend/.env` |
 | `The port 1337 is already used` | Strapi tourne déjà dans un autre terminal |
+
+## Auteur
+
+Projet développé par **FERCHICHI Molka**.
